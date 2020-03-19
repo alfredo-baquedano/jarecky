@@ -11,13 +11,17 @@
  */
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import {
+  StyleSheet,
+  StatusBar
+} from 'react-native';
+
 import {
   ApplicationProvider,
   IconRegistry,
-  Layout,
-  Text,
+  Layout
 } from '@ui-kitten/components';
+
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import {
   mapping,
@@ -30,6 +34,7 @@ const App = () => (
   <>
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider mapping={mapping} theme={theme}>
+      <StatusBar backgroundColor={theme['color-primary-900']} />
       <Layout style={styles.container}>
         <ChartScreen/>
       </Layout>
