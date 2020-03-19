@@ -1,4 +1,4 @@
-package com.jarecki;
+package com.jarecky;
 
 import android.app.Application;
 import android.content.Context;

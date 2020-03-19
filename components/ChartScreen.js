@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         margin: 20
     }
-  });
+});
