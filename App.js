@@ -14,8 +14,6 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
   ApplicationProvider,
-  Button,
-  Icon,
   IconRegistry,
   Layout,
   Text,
@@ -26,14 +24,14 @@ import {
   dark as theme,
 } from '@eva-design/eva';
 
+import  ChartScreen  from './components/ChartScreen';
+
 const App = () => (
   <>
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider mapping={mapping} theme={theme}>
       <Layout style={styles.container}>
-        <Text style={styles.text} category='h1'>
-          Welcome to Jarecki
-        </Text>
+        <ChartScreen/>
       </Layout>
     </ApplicationProvider>
   </>
