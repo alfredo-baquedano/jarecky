@@ -82,8 +82,22 @@ const ChartScreen = () => {
         }],
     })
 
+    const xAxis = {
+        enabled: false
+    }
+    const yAxis = {
+        left: {
+            drawLabels: false,
+            drawAxisLine: false,
+            drawGridLines: true
+        },
+        right: {
+            enabled: false
+        }
+    }
+
     const marker = {
-        enabled: true,
+        enabled: false,
         markerColor: processColor('#2c3e50'),
         textColor: processColor('white'),
     }
@@ -140,17 +154,18 @@ const ChartScreen = () => {
             <Layout style={styles.chartLayour} onLayout={(event) => {
                 setChartWidth(event.nativeEvent.layout.width)
             }}>
-            <CandleStickChart
-                style={{height: chartHeight, width: chartWidth}}
-                data={chartData}
-                marker={marker}
-                chartDescription={{text: ''}}
-                legend={legend}
-                xAxis={{drawLabels: false}}
-                yAxis={{drawLabels: false}}
-                maxVisibleValueCount={16}
-                autoScaleMinMaxEnabled={true}
-                zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
+                <CandleStickChart
+                    style={{height: chartHeight, width: chartWidth}}
+                    data={chartData}
+                    marker={marker}
+                    chartDescription={{text: ''}}
+                    dragDecelerationEnabled={false}
+                    legend={legend}
+                    xAxis={xAxis}
+                    yAxis={yAxis}
+                    maxVisibleValueCount={16}
+                    autoScaleMinMaxEnabled={true}
+                    zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
             />
             </Layout>
             <Layout style={styles.chartControlLayour}>
