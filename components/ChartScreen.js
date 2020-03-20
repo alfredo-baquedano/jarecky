@@ -19,6 +19,11 @@ import {
     dark as theme,
 } from '@eva-design/eva';
 
+import set from 'lodash'
+
+const increasingColor = "#2ECC71"
+const decreasingColor = "#E74C3C"
+
 const ChartScreen = () => {
 
     const [chartWidth, setChartWidth] = useState(400);
@@ -33,32 +38,99 @@ const ChartScreen = () => {
     const [chartData, setChartData] = useState({
         dataSets: [{
             values: [
-                {shadowH: 1, shadowL: 0, open: 1, close: 0},
-                {shadowH: 2, shadowL: 1, open: 2, close: 1},
-                {shadowH: 3, shadowL: 2, open: 3, close: 2},
-                {shadowH: 2, shadowL: 3, open: 2, close: 3},
+                {shadowH: 0, shadowL: 1, open: 0, close: 1},
+                {shadowH: 1, shadowL: 1, open: 1, close: 1},
                 {shadowH: 1, shadowL: 2, open: 1, close: 2},
+                {shadowH: 2, shadowL: 2, open: 2, close: 2},
+                {shadowH: 2, shadowL: 2, open: 2, close: 2},
+                {shadowH: 2, shadowL: 3, open: 2, close: 3},
+                {shadowH: 3, shadowL: 2, open: 3, close: 2},
                 {shadowH: 2, shadowL: 1, open: 2, close: 1},
+                {shadowH: 1, shadowL: 2, open: 1, close: 2},
+                {shadowH: 2, shadowL: 3, open: 2, close: 3},
+                {shadowH: 3, shadowL: 4, open: 3, close: 4},
+                {shadowH: 4, shadowL: 4, open: 4, close: 4},
+                {shadowH: 4, shadowL: 5, open: 4, close: 5},
+                {shadowH: 5, shadowL: 4, open: 5, close: 4},
+                {shadowH: 4, shadowL: 4, open: 4, close: 4},
+                {shadowH: 4, shadowL: 3, open: 4, close: 3},
+                {shadowH: 3, shadowL: 3, open: 3, close: 3},
+                {shadowH: 3, shadowL: 3, open: 3, close: 3},
+                {shadowH: 3, shadowL: 2, open: 3, close: 2},
+                {shadowH: 2, shadowL: 1, open: 2, close: 1},
+                {shadowH: 1, shadowL: 0, open: 1, close: 0},
+                {shadowH: 0, shadowL: 0, open: 0, close: 0},
+                {shadowH: 0, shadowL: 1, open: 0, close: 1}
             ],
             label: 'AAPL',
             config: {
                 highlightColor: processColor('darkgray'),
-
-                shadowColor: processColor('black'),
+                shadowColor: processColor('white'),
                 shadowWidth: 1,
                 shadowColorSameAsCandle: true,
-                increasingColor: processColor('#71BD6A'),
+                increasingColor: processColor(increasingColor),
                 increasingPaintStyle: 'FILL',
-                decreasingColor: processColor('#D14B5A')
+                decreasingColor: processColor(decreasingColor),
+                neutralColor: processColor('white')
             },
-            xAxis: {},
-            yAxis: {}
+            xAxis: {
+                drawLabels: false
+            },
+            yAxis: {
+                drawLabels: false
+            }
         }],
     })
+
     const marker = {
         enabled: true,
         markerColor: processColor('#2c3e50'),
         textColor: processColor('white'),
+    }
+
+    const handleUpButton = () => {
+        let lastValue = chartData.dataSets[0].values[chartData.dataSets[0].values.length - 1]
+        const dataSets = [{ ...chartData.dataSets[0], values: [...chartData.dataSets[0].values,
+            {
+                shadowH: lastValue.close,
+                shadowL: lastValue.close + 1,
+                open: lastValue.close,
+                close: lastValue.close + 1
+            }
+        ]}]
+        newChartData = {...chartData, dataSets}
+        console.log('newChartData', newChartData)
+        setChartData(newChartData)
+    }
+
+    const handleDownButton = () => {
+        let lastValue = chartData.dataSets[0].values[chartData.dataSets[0].values.length - 1]
+        const dataSets = [{ ...chartData.dataSets[0], values: [...chartData.dataSets[0].values,
+            {
+                shadowH: lastValue.close,
+                shadowL: lastValue.close - 1,
+                open: lastValue.close,
+                close: lastValue.close - 1
+            }
+        ]}]
+        newChartData = {...chartData, dataSets}
+        console.log('newChartData', newChartData)
+        setChartData(newChartData)
+    }
+
+    const handleNeutralButton = () => {
+        let lastValue = chartData.dataSets[0].values[chartData.dataSets[0].values.length - 1]
+        const dataSets = [{ ...chartData.dataSets[0], values: [...chartData.dataSets[0].values,
+            {
+                shadowH: lastValue.close,
+                shadowL: lastValue.close,
+                open: lastValue.close,
+                close: lastValue.close
+            }
+        ]}]
+        newChartData = {...chartData, dataSets}
+        console.log('newChartData', newChartData)
+        setChartData(newChartData)
     }
 
     return (
@@ -72,21 +144,21 @@ const ChartScreen = () => {
                 style={{height: chartHeight, width: chartWidth}}
                 data={chartData}
                 marker={marker}
-                chartDescription={{text: 'CandleStick'}}
+                chartDescription={{text: ''}}
                 legend={legend}
-                xAxis={{}}
-                yAxis={{}}
+                xAxis={{drawLabels: false}}
+                yAxis={{drawLabels: false}}
                 maxVisibleValueCount={16}
                 autoScaleMinMaxEnabled={true}
                 zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
             />
             </Layout>
             <Layout style={styles.chartControlLayour}>
-                <Button style={styles.chartControlButtonUp}>
+                <Button style={styles.chartControlButtonUp} onPress={handleUpButton}>
                 </Button>
-                <Button style={styles.chartControlButtonDown}>
+                <Button style={styles.chartControlButtonNeutral} onPress={handleNeutralButton}>
                 </Button>
-                <Button style={styles.chartControlButtonStill}>
+                <Button style={styles.chartControlButtonDown} onPress={handleDownButton}>
                 </Button>
             </Layout>
         </Layout>
@@ -111,16 +183,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     chartControlButtonUp: {
-        backgroundColor: 'green',
-        borderColor: 'green',
+        backgroundColor: increasingColor,
+        borderColor: increasingColor,
         margin: 20
     },
     chartControlButtonDown: {
-        backgroundColor: 'red',
-        borderColor: 'red',
+        backgroundColor: decreasingColor,
+        borderColor: decreasingColor,
         margin: 20
     },
-    chartControlButtonStill: {
+    chartControlButtonNeutral: {
         backgroundColor: 'white',
         borderColor: 'white',
         margin: 20
