@@ -22,7 +22,7 @@ const App = () => (
   <>
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider mapping={mapping} theme={theme}>
-      <StatusBar backgroundColor={theme['color-primary-900']} />
+      <StatusBar backgroundColor="#101426" />
       <Layout style={styles.container}>
         <ChartScreen/>
       </Layout>

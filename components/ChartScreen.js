@@ -1,33 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { StyleSheet, processColor } from 'react-native';
+import { StyleSheet, processColor } from 'react-native'
 
-/*
-import {
-    BarChart
-} from "react-native-chart-kit";
-*/
-
-import { CandleStickChart } from 'react-native-charts-wrapper';
+import { CandleStickChart } from 'react-native-charts-wrapper'
 
 import {
     Layout,
     Button,
-} from '@ui-kitten/components';
+} from '@ui-kitten/components'
 
-import {
-    dark as theme,
-} from '@eva-design/eva';
+const increasingColor = '#2ECC71'
+const decreasingColor = '#E74C3C'
 
-import set from 'lodash'
-
-const increasingColor = "#2ECC71"
-const decreasingColor = "#E74C3C"
+const backgroundColor = '#151A30'
 
 const ChartScreen = () => {
 
-    const [chartWidth, setChartWidth] = useState(400);
-    const [chartHeight, setChartHeight] = useState(200);
+    const [chartWidth, setChartWidth] = useState(400)
+    const [chartHeight, setChartHeight] = useState(200)
 
     const legend = {
         enabled: false,
@@ -186,16 +176,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor
     },
     chartControlLayour: {
         flexShrink: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor
     },
     chartLayour: {
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor
     },
     chartControlButtonUp: {
         backgroundColor: increasingColor,
