@@ -7,6 +7,7 @@ import { CandleStickChart } from 'react-native-charts-wrapper'
 import {
     Layout,
     Button,
+    Icon,
 } from '@ui-kitten/components'
 
 const increasingColor = '#2ECC71'
@@ -186,6 +187,10 @@ const ChartScreen = () => {
         setChartData(newChartData)
     }
 
+    const resetChart = () => {
+        setChartData(initialChartData)
+    } 
+
     return (
         <Layout style={styles.container} onLayout={(event) => {
             setChartHeight(event.nativeEvent.layout.height)
@@ -214,11 +219,26 @@ const ChartScreen = () => {
             />
             </Layout>
             <Layout style={styles.chartControlLayour}>
-                <Button style={styles.chartControlButtonUp} onPress={handleUpButton}>
+                <Button
+                    style={styles.chartControlButtonReset}
+                    icon={() => <Icon
+                        style={{marginLeft: 0, marginRight: 0}}
+                        name="trash-2-outline"
+                        fill={decreasingColor}
+                    />}
+                    onPress={resetChart}>
+                    </Button>
+                <Button
+                    style={styles.chartControlButtonUp}
+                    onPress={handleUpButton}>
                 </Button>
-                <Button style={styles.chartControlButtonNeutral} onPress={handleNeutralButton}>
+                <Button
+                    style={styles.chartControlButtonNeutral}
+                    onPress={handleNeutralButton}>
                 </Button>
-                <Button style={styles.chartControlButtonDown} onPress={handleDownButton}>
+                <Button
+                    style={styles.chartControlButtonDown}
+                    onPress={handleDownButton}>
                 </Button>
             </Layout>
         </Layout>
@@ -244,6 +264,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor
+    },
+    chartControlButtonReset: {
+        backgroundColor: 'transparent',
+        borderColor: decreasingColor,
+        margin: 20,
+        padding: 0,
     },
     chartControlButtonUp: {
         backgroundColor: increasingColor,
