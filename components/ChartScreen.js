@@ -25,39 +25,19 @@ const ChartScreen = () => {
         form: 'CIRCLE',
         wordWrapEnabled: true
     }
-    const [chartData, setChartData] = useState({
+
+    const initialChartData = {
         dataSets: [{
             values: [
-                {shadowH: 0, shadowL: 1, open: 0, close: 1},
-                {shadowH: 1, shadowL: 1, open: 1, close: 1},
-                {shadowH: 1, shadowL: 2, open: 1, close: 2},
-                {shadowH: 2, shadowL: 2, open: 2, close: 2},
-                {shadowH: 2, shadowL: 2, open: 2, close: 2},
-                {shadowH: 2, shadowL: 3, open: 2, close: 3},
-                {shadowH: 3, shadowL: 2, open: 3, close: 2},
-                {shadowH: 2, shadowL: 1, open: 2, close: 1},
-                {shadowH: 1, shadowL: 2, open: 1, close: 2},
-                {shadowH: 2, shadowL: 3, open: 2, close: 3},
-                {shadowH: 3, shadowL: 4, open: 3, close: 4},
-                {shadowH: 4, shadowL: 4, open: 4, close: 4},
-                {shadowH: 4, shadowL: 5, open: 4, close: 5},
-                {shadowH: 5, shadowL: 4, open: 5, close: 4},
-                {shadowH: 4, shadowL: 4, open: 4, close: 4},
-                {shadowH: 4, shadowL: 3, open: 4, close: 3},
-                {shadowH: 3, shadowL: 3, open: 3, close: 3},
-                {shadowH: 3, shadowL: 3, open: 3, close: 3},
-                {shadowH: 3, shadowL: 2, open: 3, close: 2},
-                {shadowH: 2, shadowL: 1, open: 2, close: 1},
-                {shadowH: 1, shadowL: 0, open: 1, close: 0},
-                {shadowH: 0, shadowL: 0, open: 0, close: 0},
-                {shadowH: 0, shadowL: 1, open: 0, close: 1}
+                {shadowH: 0, shadowL: 0, open: 0, close: 0, marker: 'pivot'}
             ],
             label: 'AAPL',
             config: {
-                highlightColor: processColor('darkgray'),
+                drawVerticalHighlightIndicator: false,
+                drawHorizontalHighlightIndicator: false,
                 shadowColor: processColor('white'),
-                shadowWidth: 1,
-                shadowColorSameAsCandle: true,
+                shadowColorSameAsCandle: false,
+                touchEnabled: false,
                 increasingColor: processColor(increasingColor),
                 increasingPaintStyle: 'FILL',
                 decreasingColor: processColor(decreasingColor),
@@ -70,7 +50,9 @@ const ChartScreen = () => {
                 drawLabels: false
             }
         }],
-    })
+    }
+
+    const [chartData, setChartData] = useState(initialChartData)
 
     const xAxis = {
         enabled: false
@@ -88,8 +70,8 @@ const ChartScreen = () => {
 
     const marker = {
         enabled: false,
-        markerColor: processColor('#2c3e50'),
-        textColor: processColor('white'),
+        markerColor: processColor('rgba(0, 0, 0, 0.4)'),
+        textColor: processColor('white')
     }
 
     const handleUpButton = () => {
@@ -104,7 +86,7 @@ const ChartScreen = () => {
         ]}]
         newChartData = {...chartData, dataSets}
         console.log('newChartData', newChartData)
-        setChartData(newChartData)
+        renderPivots(newChartData)
     }
 
     const handleDownButton = () => {
@@ -119,7 +101,7 @@ const ChartScreen = () => {
         ]}]
         newChartData = {...chartData, dataSets}
         console.log('newChartData', newChartData)
-        setChartData(newChartData)
+        renderPivots(newChartData)
     }
 
     const handleNeutralButton = () => {
@@ -134,6 +116,73 @@ const ChartScreen = () => {
         ]}]
         newChartData = {...chartData, dataSets}
         console.log('newChartData', newChartData)
+        renderPivots(newChartData)
+    }
+
+    const renderPivots = (updatedChartData) => {
+        let values = updatedChartData.dataSets[0].values
+        let consecutiveVariation = 0
+        let hill = false
+        
+        let pivots = []
+        let pivotCandidate
+
+        values.forEach((value, index) => {
+            if (index !== 0) {
+                if (value.close > values[index-1].close) {
+                    if (consecutiveVariation > 0) {
+                        consecutiveVariation++
+                    } else {
+                        if (consecutiveVariation > 3) {
+                            hill = false
+                        } else {
+                            pivotCandidate = index
+                        }
+                        consecutiveVariation = 1
+                    }
+                    if (consecutiveVariation === 3) {
+                        if (hill === true) {
+                            pivots.push({ index: pivotCandidate, hill: 'down' })
+                        }
+                        hill = true
+                    }
+                }
+                if (value.close < values[index-1].close) {
+                    if (consecutiveVariation < 0) {
+                        consecutiveVariation--
+                    } else {
+                        if (consecutiveVariation < -3) {
+                            hill = false
+                        } else {
+                            pivotCandidate = index
+                        }
+                        consecutiveVariation = -1
+                    }
+                    if (consecutiveVariation === -3) {
+                        if (hill === true) {
+                            pivots.push({ index: pivotCandidate, hill: 'up' })
+                        }
+                        hill = true
+                    }
+                }
+                console.log('consecutiveVariation', consecutiveVariation)
+                console.log('hill', hill)
+            }
+        })
+
+        let auxValues = [...updatedChartData.dataSets[0].values]
+
+        pivots.forEach(value => {
+            auxValues[value.index] = {
+                ...auxValues[value.index],
+                shadowH: auxValues[value.index].open + (value.hill === 'up'? 0.2 : -0.2)
+            }
+        })
+
+        const dataSets = [{ ...updatedChartData.dataSets[0], values: auxValues}]
+
+        newChartData = {...updatedChartData, dataSets}
+
         setChartData(newChartData)
     }
 
@@ -153,9 +202,15 @@ const ChartScreen = () => {
                     legend={legend}
                     xAxis={xAxis}
                     yAxis={yAxis}
+                    highlights={[
+                        { x: 6 },
+                        { x: 9 },
+                        { x: 15 }
+                    ]}
                     maxVisibleValueCount={16}
                     autoScaleMinMaxEnabled={true}
                     zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
+                    onChange={(event) => console.log(event.nativeEvent)}
             />
             </Layout>
             <Layout style={styles.chartControlLayour}>
