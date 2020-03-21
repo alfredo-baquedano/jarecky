@@ -39,6 +39,7 @@ const ChartScreen = () => {
                 shadowColor: processColor('white'),
                 shadowColorSameAsCandle: false,
                 touchEnabled: false,
+                drawValues: false,
                 increasingColor: processColor(increasingColor),
                 increasingPaintStyle: 'FILL',
                 decreasingColor: processColor(decreasingColor),
@@ -212,6 +213,7 @@ const ChartScreen = () => {
                         { x: 9 },
                         { x: 15 }
                     ]}
+                    visibleRange={{x: {min: 10} }}
                     maxVisibleValueCount={16}
                     autoScaleMinMaxEnabled={true}
                     zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
