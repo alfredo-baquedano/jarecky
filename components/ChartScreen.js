@@ -35,7 +35,8 @@ const ChartScreen = () => {
             label: 'AAPL',
             config: {
                 drawVerticalHighlightIndicator: false,
-                drawHorizontalHighlightIndicator: false,
+                drawHorizontalHighlightIndicator: true,
+                highlightColor: processColor('red'),
                 shadowColor: processColor('white'),
                 shadowColorSameAsCandle: false,
                 touchEnabled: false,
@@ -208,11 +209,6 @@ const ChartScreen = () => {
                     legend={legend}
                     xAxis={xAxis}
                     yAxis={yAxis}
-                    highlights={[
-                        { x: 6 },
-                        { x: 9 },
-                        { x: 15 }
-                    ]}
                     visibleRange={{x: {min: 10} }}
                     maxVisibleValueCount={16}
                     autoScaleMinMaxEnabled={true}
