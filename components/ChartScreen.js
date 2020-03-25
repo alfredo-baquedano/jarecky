@@ -10,10 +10,11 @@ import {
     Icon,
 } from '@ui-kitten/components'
 
-const increasingColor = '#2ECC71'
-const decreasingColor = '#E74C3C'
+const increasingColor = '#388E3C'
+const decreasingColor = '#E53935'
 
-const backgroundColor = '#151A30'
+const backgroundColor = '#FAFAFA'
+const chartBackgroundColor = '#FAFAFA'
 
 const ChartScreen = () => {
 
@@ -37,13 +38,15 @@ const ChartScreen = () => {
                 drawVerticalHighlightIndicator: false,
                 drawHorizontalHighlightIndicator: true,
                 highlightColor: processColor('red'),
-                shadowColor: processColor('white'),
+                shadowColor: processColor('black'),
                 shadowColorSameAsCandle: false,
                 touchEnabled: false,
                 drawValues: false,
+                shadowWidth: 1.5,
                 increasingColor: processColor(increasingColor),
                 increasingPaintStyle: 'FILL',
                 decreasingColor: processColor(decreasingColor),
+                decreasingPaintStyle: 'FILL',
                 neutralColor: processColor('white')
             },
             xAxis: {
@@ -226,12 +229,17 @@ const ChartScreen = () => {
                     legend={legend}
                     xAxis={xAxis}
                     yAxis={yAxis}
-                    visibleRange={{x: {min: 10} }}
+                    visibleRange={{x: {min: 40}}}
                     maxVisibleValueCount={16}
                     autoScaleMinMaxEnabled={true}
+                    drawBorders
+                    borderColor={processColor('grey')}
+                    drawGridBackground
+                    gridBackgroundColor={processColor(chartBackgroundColor)}
+                    animation={{ durationX: 250, durationY: 250, easingX: 'easeInOut', easingY: 'easeInOut'}}
                     zoom={{scaleX: 1, scaleY: 1, xValue:  40, yValue: 916, axisDependency: 'LEFT'}}
                     onChange={(event) => console.log(event.nativeEvent)}
-            />
+                />
             </Layout>
             <Layout style={styles.chartControlLayour}>
                 <Button
@@ -288,17 +296,17 @@ const styles = StyleSheet.create({
     },
     chartControlButtonUp: {
         backgroundColor: increasingColor,
-        borderColor: increasingColor,
+        borderColor: 'black',
         margin: 20
     },
     chartControlButtonDown: {
         backgroundColor: decreasingColor,
-        borderColor: decreasingColor,
+        borderColor: 'black',
         margin: 20
     },
     chartControlButtonNeutral: {
-        backgroundColor: 'white',
-        borderColor: 'white',
+        backgroundColor: 'transparent',
+        borderColor: 'black',
         margin: 20
     },
     chart: {
