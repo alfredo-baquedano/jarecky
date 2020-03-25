@@ -130,46 +130,51 @@ const ChartScreen = () => {
         let pivots = []
         let pivotCandidate
 
-        values.forEach((value, index) => {
-            if (index !== 0) {
-                if (value.close > values[index-1].close) {
+        let valuesWithDetails = values.map((value, index) => ({
+            ...value,
+            index,
+            hill: value.open > value.close? 'up' : (value.open < value.close)? 'down' : 'neutral'
+        }))
+
+        valuesWithDetails.forEach((value) => {
+            if (value.index !== 0) {
+                if (value.hill === 'up') {
                     if (consecutiveVariation > 0) {
                         consecutiveVariation++
                     } else {
-                        if (consecutiveVariation > 3) {
+                        if (consecutiveVariation > 1 && hill === true) {
                             hill = false
                         } else {
-                            pivotCandidate = index
+                            pivotCandidate = value
                         }
                         consecutiveVariation = 1
                     }
-                    if (consecutiveVariation === 3) {
+                    if (consecutiveVariation === 2) {
                         if (hill === true) {
-                            pivots.push({ index: pivotCandidate, hill: 'down' })
+                            pivots.push(pivotCandidate)
                         }
                         hill = true
+                        
                     }
                 }
-                if (value.close < values[index-1].close) {
+                if (value.hill === 'down') {
                     if (consecutiveVariation < 0) {
                         consecutiveVariation--
                     } else {
-                        if (consecutiveVariation < -3) {
+                        if (consecutiveVariation < -1 && hill === true) {
                             hill = false
                         } else {
-                            pivotCandidate = index
+                            pivotCandidate = value
                         }
                         consecutiveVariation = -1
                     }
-                    if (consecutiveVariation === -3) {
+                    if (consecutiveVariation === -2) {
                         if (hill === true) {
-                            pivots.push({ index: pivotCandidate, hill: 'up' })
+                            pivots.push(pivotCandidate)
                         }
                         hill = true
                     }
                 }
-                console.log('consecutiveVariation', consecutiveVariation)
-                console.log('hill', hill)
             }
         })
 
@@ -181,6 +186,8 @@ const ChartScreen = () => {
                 shadowH: auxValues[value.index].open + (value.hill === 'up'? 0.2 : -0.2)
             }
         })
+
+        // console.log('pivots', pivots)
 
         const dataSets = [{ ...updatedChartData.dataSets[0], values: auxValues}]
 
