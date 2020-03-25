@@ -60,6 +60,7 @@ const ChartScreen = () => {
     const xAxis = {
         enabled: false
     }
+
     const yAxis = {
         left: {
             drawLabels: false,
@@ -88,7 +89,6 @@ const ChartScreen = () => {
             }
         ]}]
         newChartData = {...chartData, dataSets}
-        console.log('newChartData', newChartData)
         renderPivots(newChartData)
     }
 
@@ -103,7 +103,6 @@ const ChartScreen = () => {
             }
         ]}]
         newChartData = {...chartData, dataSets}
-        console.log('newChartData', newChartData)
         renderPivots(newChartData)
     }
 
@@ -118,76 +117,86 @@ const ChartScreen = () => {
             }
         ]}]
         newChartData = {...chartData, dataSets}
-        console.log('newChartData', newChartData)
         renderPivots(newChartData)
     }
 
     const renderPivots = (updatedChartData) => {
-        let values = updatedChartData.dataSets[0].values
-        let consecutiveVariation = 0
-        let hill = false
+        let auxValues = [...updatedChartData.dataSets[0].values]
+        let consecutiveIncrease = 0
+        let consecutiveDecrease = 0
         
         let pivots = []
         let pivotCandidate
 
-        let valuesWithDetails = values.map((value, index) => ({
+        let valuesWithDetails = auxValues.map((value, index) => ({
             ...value,
-            index,
-            hill: value.open > value.close? 'up' : (value.open < value.close)? 'down' : 'neutral'
+            index: index-1,
+            variability: value.open > value.close? 'decreasing' : (value.open < value.close)? 'increasing' : 'neutral'
         }))
 
+        const pivotVariation = 2
+        const permitedVariation = 1
+
+        let variability = 'neutral'
+
         valuesWithDetails.forEach((value) => {
-            if (value.index !== 0) {
-                if (value.hill === 'up') {
-                    if (consecutiveVariation > 0) {
-                        consecutiveVariation++
-                    } else {
-                        if (consecutiveVariation > 1 && hill === true) {
-                            hill = false
-                        } else {
-                            pivotCandidate = value
-                        }
-                        consecutiveVariation = 1
-                    }
-                    if (consecutiveVariation === 2) {
-                        if (hill === true) {
-                            pivots.push(pivotCandidate)
-                        }
-                        hill = true
-                        
-                    }
+            if (value.variability === 'increasing') {
+                if (variability === 'decreasing') {
+                    pivotCandidate = value
                 }
-                if (value.hill === 'down') {
-                    if (consecutiveVariation < 0) {
-                        consecutiveVariation--
-                    } else {
-                        if (consecutiveVariation < -1 && hill === true) {
-                            hill = false
-                        } else {
-                            pivotCandidate = value
-                        }
-                        consecutiveVariation = -1
+
+                consecutiveIncrease++
+                consecutiveDecrease = 0
+                
+                if (consecutiveIncrease >= pivotVariation) {
+                    variability = 'increasing'
+                    if (pivotCandidate !== undefined) {
+                        pivots.push(pivotCandidate)
+                        pivotCandidate = undefined
                     }
-                    if (consecutiveVariation === -2) {
-                        if (hill === true) {
-                            pivots.push(pivotCandidate)
-                        }
-                        hill = true
+                } else {
+                    if (consecutiveIncrease > permitedVariation ) {
+                        variability = 'neutral'
+                        pivotCandidate = undefined
                     }
                 }
             }
-        })
+            if (value.variability === 'decreasing') {
+                if (variability === 'increasing') {
+                    pivotCandidate = value
+                }
 
-        let auxValues = [...updatedChartData.dataSets[0].values]
+                consecutiveDecrease++
+                consecutiveIncrease = 0
+
+                if (consecutiveDecrease >= pivotVariation) {
+                    variability = 'decreasing'
+                    if (pivotCandidate !== undefined) {
+                        pivots.push(pivotCandidate)
+                        pivotCandidate = undefined
+                    }
+                } else {
+                    if (consecutiveDecrease > permitedVariation ) {
+                        variability = 'neutral'
+                        pivotCandidate = undefined
+                    }
+                }
+            }
+            /*
+            console.log('consecutiveIncrease', consecutiveIncrease)
+            console.log('consecutiveDecrease', consecutiveDecrease)
+            console.log('variability', variability)
+            console.log('pivotCandidate', pivotCandidate)
+            console.log('valuesWithDetails', valuesWithDetails)
+            */
+        })
 
         pivots.forEach(value => {
             auxValues[value.index] = {
                 ...auxValues[value.index],
-                shadowH: auxValues[value.index].open + (value.hill === 'up'? 0.2 : -0.2)
+                shadowH: auxValues[value.index].open + (value.variability === 'decreasing'? 0.2 : -0.2)
             }
         })
-
-        // console.log('pivots', pivots)
 
         const dataSets = [{ ...updatedChartData.dataSets[0], values: auxValues}]
 
