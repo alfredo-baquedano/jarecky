@@ -83,7 +83,7 @@ const ChartScreen = () => {
         const dataSets = [{ ...chartData.dataSets[0], values: [...chartData.dataSets[0].values,
             {
                 shadowH: lastValue.close,
-                shadowL: lastValue.close + 1,
+                shadowL: lastValue.close,
                 open: lastValue.close,
                 close: lastValue.close + 1
             }
@@ -97,7 +97,7 @@ const ChartScreen = () => {
         const dataSets = [{ ...chartData.dataSets[0], values: [...chartData.dataSets[0].values,
             {
                 shadowH: lastValue.close,
-                shadowL: lastValue.close - 1,
+                shadowL: lastValue.close,
                 open: lastValue.close,
                 close: lastValue.close - 1
             }
@@ -194,7 +194,8 @@ const ChartScreen = () => {
         pivots.forEach(value => {
             auxValues[value.index] = {
                 ...auxValues[value.index],
-                shadowH: auxValues[value.index].open + (value.variability === 'decreasing'? 0.2 : -0.2)
+                shadowH: auxValues[value.index].open + (value.variability === 'decreasing'? 0.2 : 0),
+                shadowL: auxValues[value.index].open + (value.variability === 'increasing'? -0.2 : 0)
             }
         })
 
