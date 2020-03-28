@@ -47,7 +47,7 @@ const ChartScreen = () => {
                 increasingPaintStyle: 'FILL',
                 decreasingColor: processColor(decreasingColor),
                 decreasingPaintStyle: 'FILL',
-                neutralColor: processColor('white')
+                neutralColor: processColor('black')
             },
             xAxis: {
                 drawLabels: false
