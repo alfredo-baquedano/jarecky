@@ -16,7 +16,7 @@ import  ChartScreen  from './components/ChartScreen';
 import  AboutScreen  from './components/AboutScreen';
 
 import { NavigationContainer } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator, CardStyleInterpolators } from "@react-navigation/stack"
 
 const ChartStack = createStackNavigator();
 
@@ -25,7 +25,10 @@ const App = () => (
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider mapping={mapping} theme={theme}>
       <NavigationContainer>
-        <ChartStack.Navigator initialRouteName="ChartScreen">
+        <ChartStack.Navigator 
+          screenOptions={{
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}>
           <ChartStack.Screen
             name="ChartScreen"
             component={ChartScreen}
