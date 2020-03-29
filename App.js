@@ -1,24 +1,19 @@
 import React from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  processColor
-} from 'react-native';
 
 import {
   ApplicationProvider,
-  IconRegistry,
-  Icon,
-  Button
+  IconRegistry
 } from '@ui-kitten/components';
 
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
 import {
   mapping,
-  dark as theme,
+  light as theme,
 } from '@eva-design/eva';
 
 import  ChartScreen  from './components/ChartScreen';
+import  AboutScreen  from './components/AboutScreen';
 
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -29,26 +24,17 @@ const App = () => (
   <>
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider mapping={mapping} theme={theme}>
-      <StatusBar backgroundColor="#BDBDBD" />
       <NavigationContainer>
         <ChartStack.Navigator initialRouteName="ChartScreen">
           <ChartStack.Screen
             name="ChartScreen"
             component={ChartScreen}
+          />
+          <ChartStack.Screen
+            name="AboutScreen"
+            component={AboutScreen}
             options={{
-              title: "Jarecky",
-              headerRight: () => (
-                <Button
-                  style={styles.aboutButton}
-                  onPress={() => alert('This is a button!')}
-                  icon={() => 
-                    <Icon
-                      name="info-outline"
-                      fill={'black'}
-                    />
-                  }
-                />
-              )
+              title: "Acerca de"
             }}
           />
         </ChartStack.Navigator>
@@ -56,15 +42,5 @@ const App = () => (
     </ApplicationProvider>
   </>
 );
-
-const styles = StyleSheet.create({
-  aboutButton: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent'
-  },
-  text: {
-    textAlign: 'center',
-  }
-});
 
 export default App;

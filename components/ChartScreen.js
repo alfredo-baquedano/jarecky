@@ -8,7 +8,11 @@ import {
     Layout,
     Button,
     Icon,
+    Text,
+    Avatar
 } from '@ui-kitten/components'
+
+import { useNavigation } from '@react-navigation/native';
 
 const increasingColor = '#388E3C'
 const decreasingColor = '#E53935'
@@ -17,6 +21,29 @@ const backgroundColor = '#FAFAFA'
 const chartBackgroundColor = '#FAFAFA'
 
 const ChartScreen = () => {
+
+    const navigation = useNavigation()
+
+    navigation.setOptions({
+        headerTitle: props => (
+        <Layout style={styles.titleLayout}>
+            <Avatar style={{margin: 8}} size="tiny" source={require('../assets/jarecky-logo.png')}/>
+            <Text category='h5'>Jarecky</Text>
+        </Layout>
+        ),
+        headerRight: () => (
+        <Button
+            style={styles.aboutButton}
+            onPress={() => navigation.push('AboutScreen')}
+            icon={() => 
+            <Icon
+                name="info-outline"
+                fill={'black'}
+            />
+            }
+        />
+        )
+    })
 
     const [chartWidth, setChartWidth] = useState(400)
     const [chartHeight, setChartHeight] = useState(200)
@@ -269,6 +296,11 @@ const ChartScreen = () => {
 }
 
 const styles = StyleSheet.create({
+    titleLayout: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     container: {
         flexDirection: 'row',
         flex: 1,
@@ -276,11 +308,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor
     },
+    aboutButton: {
+      backgroundColor: 'transparent',
+      borderColor: 'transparent'
+    },
     chartControlLayour: {
         flexShrink: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor
+        backgroundColor,
+        marginTop: 20
     },
     chartLayour: {
         flexGrow: 1,
@@ -291,8 +328,7 @@ const styles = StyleSheet.create({
     chartControlButtonReset: {
         backgroundColor: 'transparent',
         borderColor: decreasingColor,
-        margin: 20,
-        padding: 0,
+        margin: 20
     },
     chartControlButtonUp: {
         backgroundColor: increasingColor,
