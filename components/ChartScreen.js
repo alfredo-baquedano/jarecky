@@ -37,6 +37,8 @@ const ChartScreen = () => {
             onPress={() => navigation.push('AboutScreen')}
             icon={() => 
             <Icon
+                width={24}
+                height={24}
                 name="info-outline"
                 fill={'black'}
             />
@@ -304,8 +306,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor
     },
     aboutButton: {
@@ -314,10 +314,10 @@ const styles = StyleSheet.create({
     },
     chartControlLayour: {
         flexShrink: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
         backgroundColor,
-        marginTop: 20
+        marginRight: 16
     },
     chartLayour: {
         flexGrow: 1,
@@ -327,23 +327,19 @@ const styles = StyleSheet.create({
     },
     chartControlButtonReset: {
         backgroundColor: 'transparent',
-        borderColor: decreasingColor,
-        margin: 20
+        borderColor: decreasingColor
     },
     chartControlButtonUp: {
         backgroundColor: increasingColor,
-        borderColor: 'black',
-        margin: 20
+        borderColor: 'black'
     },
     chartControlButtonDown: {
         backgroundColor: decreasingColor,
-        borderColor: 'black',
-        margin: 20
+        borderColor: 'black'
     },
     chartControlButtonNeutral: {
         backgroundColor: 'transparent',
-        borderColor: 'black',
-        margin: 20
+        borderColor: 'black'
     },
     chart: {
         flex: 1
